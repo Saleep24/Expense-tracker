@@ -1,6 +1,7 @@
 const userForm = document.getElementById('userForm');
 const expenseForm = document.getElementById('expenseForm');
 const expenseList = document.getElementById('expenseList');
+const earningsDisplay = document.getElementById('earningsDisplay'); // New element to display earnings
 const ctx = document.getElementById('expenseChart').getContext('2d');
 
 let expenses = [];
@@ -15,7 +16,12 @@ userForm.addEventListener('submit', function (event) {
     const age = parseInt(document.getElementById('age').value);
     const goal = document.getElementById('goal').value;
 
-    console.log(`Hourly Wage: $${hourlyWage}, Hours Worked: ${hoursWorked}, Age: ${age}, Goal: ${goal}`);
+    const totalEarnings = hourlyWage * hoursWorked; // Calculate total earnings
+
+    // Display the total earnings on the page
+    earningsDisplay.textContent = `Total Earnings: $${totalEarnings.toFixed(2)}`;
+
+    console.log(`Hourly Wage: $${hourlyWage}, Hours Worked: ${hoursWorked}, Age: ${age}, Goal: ${goal}, Total Earnings: $${totalEarnings.toFixed(2)}`);
 
     userForm.reset();
 });
@@ -45,11 +51,10 @@ function displayExpenses() {
     });
 }
 
-// Update the chart with the current expenses
 function updateChart() {
     const expenseMap = {};
 
-    // Group expenses by category
+
     expenses.forEach(exp => {
         if (!expenseMap[exp.category]) {
             expenseMap[exp.category] = [];
@@ -60,25 +65,25 @@ function updateChart() {
     const labels = Object.keys(expenseMap);
     const datasets = [];
 
-    // Prepare datasets for each date per category
+
     labels.forEach(label => {
         const data = expenseMap[label];
         data.forEach((entry, index) => {
             if (!datasets[index]) {
                 datasets[index] = {
                     label: entry.date,
-                    data: new Array(labels.length).fill(0), // Create an array with the same length as labels
+                    data: new Array(labels.length).fill(0), 
                     backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`, // Random color
                     borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
                     borderWidth: 1,
                 };
             }
-            datasets[index].data[labels.indexOf(label)] += entry.amount; // Sum amounts for the same category
+            datasets[index].data[labels.indexOf(label)] += entry.amount; 
         });
     });
 
     if (chart) {
-        chart.destroy(); // Destroy the old chart instance
+        chart.destroy(); 
     }
 
     chart = new Chart(ctx, {
