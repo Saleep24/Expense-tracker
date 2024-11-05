@@ -1,58 +1,108 @@
-document.getElementById("userForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    // Collect user inputs
-    const hourlyWage = parseFloat(document.getElementById("hourlyWage").value);
-    const hoursWorked = parseFloat(document.getElementById("hoursWorked").value);
-    const age = parseInt(document.getElementById("age").value);
-    const goal = document.getElementById("goal").value;
+const userForm = document.getElementById('userForm');
+const expenseForm = document.getElementById('expenseForm');
+const expenseList = document.getElementById('expenseList');
+const ctx = document.getElementById('expenseChart').getContext('2d');
 
-    // Calculate monthly income
-    const monthlyIncome = hourlyWage * hoursWorked * 4;
-    alert(`Monthly Income: $${monthlyIncome.toFixed(2)} \nGoal: ${goal}`);
+let expenses = [];
+let chart;
+
+// Handle user information submission
+userForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const hourlyWage = parseFloat(document.getElementById('hourlyWage').value);
+    const hoursWorked = parseFloat(document.getElementById('hoursWorked').value);
+    const age = parseInt(document.getElementById('age').value);
+    const goal = document.getElementById('goal').value;
+
+    console.log(`Hourly Wage: $${hourlyWage}, Hours Worked: ${hoursWorked}, Age: ${age}, Goal: ${goal}`);
+
+    userForm.reset();
 });
 
-const expenses = [];
+// Handle expense submission
+expenseForm.addEventListener('submit', function (event) {
+    event.preventDefault();
 
-document.getElementById("expenseForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    // Collect expense data
-    const category = document.getElementById("category").value;
-    const amount = parseFloat(document.getElementById("amount").value);
-    const date = document.getElementById("date").value;
+    const category = document.getElementById('category').value;
+    const amount = parseFloat(document.getElementById('amount').value);
+    const date = new Date(document.getElementById('date').value);
 
+    // Add expense to the list
     expenses.push({ category, amount, date });
-    updateExpenseList();
+    displayExpenses();
     updateChart();
+    expenseForm.reset();
 });
 
-function updateExpenseList() {
-    const expenseList = document.getElementById("expenseList");
-    expenseList.innerHTML = "";
-    expenses.forEach((expense, index) => {
-        const expenseItem = document.createElement("div");
-        expenseItem.textContent = `${expense.date} - ${expense.category}: $${expense.amount.toFixed(2)}`;
+// Display expenses in a list
+function displayExpenses() {
+    expenseList.innerHTML = '';
+    expenses.forEach(expense => {
+        const expenseItem = document.createElement('div');
+        expenseItem.textContent = `${expense.date.toLocaleDateString()}: ${expense.category} - $${expense.amount.toFixed(2)}`;
         expenseList.appendChild(expenseItem);
     });
 }
 
+// Update the chart with the current expenses
 function updateChart() {
-    const ctx = document.getElementById("expenseChart").getContext("2d");
-    const labels = expenses.map(expense => expense.category);
-    const data = expenses.map(expense => expense.amount);
-    
-    new Chart(ctx, {
-        type: "bar",
+    const expenseMap = {};
+
+    // Group expenses by category
+    expenses.forEach(exp => {
+        if (!expenseMap[exp.category]) {
+            expenseMap[exp.category] = [];
+        }
+        expenseMap[exp.category].push({ date: exp.date.toLocaleDateString(), amount: exp.amount });
+    });
+
+    const labels = Object.keys(expenseMap);
+    const datasets = [];
+
+    // Prepare datasets for each date per category
+    labels.forEach(label => {
+        const data = expenseMap[label];
+        data.forEach((entry, index) => {
+            if (!datasets[index]) {
+                datasets[index] = {
+                    label: entry.date,
+                    data: new Array(labels.length).fill(0), // Create an array with the same length as labels
+                    backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`, // Random color
+                    borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
+                    borderWidth: 1,
+                };
+            }
+            datasets[index].data[labels.indexOf(label)] += entry.amount; // Sum amounts for the same category
+        });
+    });
+
+    if (chart) {
+        chart.destroy(); // Destroy the old chart instance
+    }
+
+    chart = new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: labels,
-            datasets: [{
-                label: "Expenses",
-                data: data,
-                backgroundColor: "rgba(92, 103, 242, 0.6)"
-            }]
+            datasets: datasets,
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount ($)',
+                    },
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Expenses',
+                    },
+                }
+            }
         }
     });
 }
