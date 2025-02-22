@@ -1,15 +1,7 @@
 import { ReactNode } from 'react';
-import { AppShell, Group, Title, ActionIcon, Box, rem, Text } from '@mantine/core';
+import { AppShell, Group, Title, ActionIcon, Box, rem, Text, UnstyledButton } from '@mantine/core';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  IconDashboard,
-  IconReceipt,
-  IconPigMoney,
-  IconTarget,
-  IconSettings,
-  IconSun,
-  IconMoon,
-} from '@tabler/icons-react';
+import { IconSun, IconMoon } from '@tabler/icons-react';
 import useStore from '../store/useStore';
 
 interface LayoutProps {
@@ -21,34 +13,34 @@ const Layout = ({ children }: LayoutProps) => {
   const { themeMode, setThemeMode } = useStore();
 
   const navItems = [
-    { icon: IconDashboard, label: 'Dashboard', path: '/' },
-    { icon: IconReceipt, label: 'Transactions', path: '/transactions' },
-    { icon: IconPigMoney, label: 'Budget', path: '/budget' },
-    { icon: IconTarget, label: 'Goals', path: '/goals' },
-    { icon: IconSettings, label: 'Settings', path: '/settings' },
+    { symbol: '›', label: 'Dashboard', path: '/' },
+    { symbol: '•', label: 'Transactions', path: '/transactions' },
+    { symbol: '•', label: 'Budget', path: '/budget' },
+    { symbol: '•', label: 'Goals', path: '/goals' },
+    { symbol: '•', label: 'Settings', path: '/settings' },
   ];
 
   return (
     <AppShell
-      header={{ height: rem(60) }}
-      navbar={{ width: rem(240), breakpoint: 'sm' }}
-      padding="md"
+      header={{ height: rem(45) }}
+      navbar={{ width: rem(160), breakpoint: 'sm' }}
+      padding="xs"
     >
-      <AppShell.Header p="md">
+      <AppShell.Header p="xs">
         <Group justify="space-between" h="100%">
-          <Title order={2} size="h4">Expense Tracker</Title>
+          <Title order={3} size="h6">Expense Tracker</Title>
           <ActionIcon
-            variant="light"
+            variant="subtle"
             onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-            size="md"
-            radius="md"
+            size="xs"
+            radius="xs"
           >
-            {themeMode === 'dark' ? <IconSun size={rem(18)} /> : <IconMoon size={rem(18)} />}
+            {themeMode === 'dark' ? <IconSun size={rem(12)} /> : <IconMoon size={rem(12)} />}
           </ActionIcon>
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="md">
+      <AppShell.Navbar p="xs">
         <Box>
           {navItems.map((item) => (
             <Link
@@ -56,37 +48,52 @@ const Layout = ({ children }: LayoutProps) => {
               to={item.path}
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <Group
-                py="xs"
-                px="sm"
+              <UnstyledButton
                 style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '3px 6px',
+                  borderRadius: 'var(--mantine-radius-xs)',
                   backgroundColor:
                     location.pathname === item.path ? 'var(--mantine-color-blue-light)' : 'transparent',
-                  borderRadius: 'var(--mantine-radius-sm)',
-                  marginBottom: 'var(--mantine-spacing-xs)',
-                  transition: 'background-color 150ms ease',
+                  transition: 'all 100ms ease',
+                  marginBottom: '1px',
+                  '&:hover': {
+                    backgroundColor: location.pathname === item.path 
+                      ? 'var(--mantine-color-blue-light)' 
+                      : 'var(--mantine-color-gray-0)',
+                  },
                 }}
               >
-                <item.icon 
-                  size={rem(18)} 
-                  style={{ 
-                    color: location.pathname === item.path 
-                      ? 'var(--mantine-color-blue-filled)' 
-                      : 'var(--mantine-color-dimmed)' 
-                  }} 
-                />
-                <Text 
-                  size="sm" 
-                  fw={500}
-                  style={{ 
-                    color: location.pathname === item.path 
-                      ? 'var(--mantine-color-blue-filled)' 
-                      : 'inherit'
-                  }}
-                >
-                  {item.label}
-                </Text>
-              </Group>
+                <Group gap={4} wrap="nowrap">
+                  <Text 
+                    size="xs"
+                    style={{ 
+                      color: location.pathname === item.path 
+                        ? 'var(--mantine-color-blue-filled)' 
+                        : 'var(--mantine-color-gray-6)',
+                      opacity: 0.8,
+                      width: '8px',
+                      fontSize: '10px'
+                    }}
+                  >
+                    {item.symbol}
+                  </Text>
+                  <Text 
+                    size="xs"
+                    fw={500}
+                    style={{ 
+                      color: location.pathname === item.path 
+                        ? 'var(--mantine-color-blue-filled)' 
+                        : 'var(--mantine-color-gray-7)',
+                      fontSize: '12px',
+                      letterSpacing: '-0.1px'
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                </Group>
+              </UnstyledButton>
             </Link>
           ))}
         </Box>
