@@ -13,11 +13,11 @@ const Layout = ({ children }: LayoutProps) => {
   const { themeMode, setThemeMode } = useStore();
 
   const navItems = [
-    { symbol: '›', label: 'Dashboard', path: '/' },
-    { symbol: '•', label: 'Transactions', path: '/transactions' },
-    { symbol: '•', label: 'Budget', path: '/budget' },
-    { symbol: '•', label: 'Goals', path: '/goals' },
-    { symbol: '•', label: 'Settings', path: '/settings' },
+    { label: 'Dashboard', path: '/' },
+    { label: 'Transactions', path: '/transactions' },
+    { label: 'Budget', path: '/budget' },
+    { label: 'Goals', path: '/goals' },
+    { label: 'Settings', path: '/settings' },
   ];
 
   return (
@@ -52,12 +52,12 @@ const Layout = ({ children }: LayoutProps) => {
                 style={{
                   display: 'block',
                   width: '100%',
-                  padding: '3px 6px',
+                  padding: '6px 12px',
                   borderRadius: 'var(--mantine-radius-xs)',
                   backgroundColor:
                     location.pathname === item.path ? 'var(--mantine-color-blue-light)' : 'transparent',
                   transition: 'all 100ms ease',
-                  marginBottom: '1px',
+                  marginBottom: '2px',
                   '&:hover': {
                     backgroundColor: location.pathname === item.path 
                       ? 'var(--mantine-color-blue-light)' 
@@ -65,34 +65,18 @@ const Layout = ({ children }: LayoutProps) => {
                   },
                 }}
               >
-                <Group gap={4} wrap="nowrap">
-                  <Text 
-                    size="xs"
-                    style={{ 
-                      color: location.pathname === item.path 
-                        ? 'var(--mantine-color-blue-filled)' 
-                        : 'var(--mantine-color-gray-6)',
-                      opacity: 0.8,
-                      width: '8px',
-                      fontSize: '10px'
-                    }}
-                  >
-                    {item.symbol}
-                  </Text>
-                  <Text 
-                    size="xs"
-                    fw={500}
-                    style={{ 
-                      color: location.pathname === item.path 
-                        ? 'var(--mantine-color-blue-filled)' 
-                        : 'var(--mantine-color-gray-7)',
-                      fontSize: '12px',
-                      letterSpacing: '-0.1px'
-                    }}
-                  >
-                    {item.label}
-                  </Text>
-                </Group>
+                <Text 
+                  fw={500}
+                  style={{ 
+                    color: location.pathname === item.path 
+                      ? 'var(--mantine-color-blue-filled)' 
+                      : 'var(--mantine-color-gray-7)',
+                    fontSize: '13.5px',
+                    letterSpacing: '-0.2px'
+                  }}
+                >
+                  {item.label}
+                </Text>
               </UnstyledButton>
             </Link>
           ))}
