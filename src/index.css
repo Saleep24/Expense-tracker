@@ -28,11 +28,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  background-color: var(--mantine-color-body);
 }
 
 h1 {
@@ -74,8 +71,8 @@ button:focus-visible {
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -83,19 +80,19 @@ button:focus-visible {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
+  background: var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-sm);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #666;
+  background: var(--mantine-color-gray-5);
 }
 
 /* Dark mode scrollbar */
 [data-mantine-color-scheme="dark"] ::-webkit-scrollbar-thumb {
-  background: #666;
+  background: var(--mantine-color-dark-4);
 }
 
 [data-mantine-color-scheme="dark"] ::-webkit-scrollbar-thumb:hover {
-  background: #888;
+  background: var(--mantine-color-dark-3);
 }
