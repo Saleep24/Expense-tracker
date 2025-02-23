@@ -1,4 +1,4 @@
-import { MantineProvider, createTheme } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import useStore from './store/useStore';
 import Dashboard from './pages/Dashboard';
@@ -7,18 +7,20 @@ import Budget from './pages/Budget';
 import Goals from './pages/Goals';
 import Settings from './pages/Settings';
 import Layout from './components/Layout';
-
-const theme = createTheme({
-  primaryColor: 'blue',
-  fontFamily: 'Inter, sans-serif',
-  defaultRadius: 'md',
-});
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 
 function App() {
   const { themeMode } = useStore();
 
   return (
-    <MantineProvider theme={theme} defaultColorScheme={themeMode}>
+    <MantineProvider
+      defaultColorScheme={themeMode}
+      theme={{
+        primaryColor: 'blue',
+        fontFamily: 'Inter, sans-serif',
+      }}
+    >
       <Router>
         <Layout>
           <Routes>

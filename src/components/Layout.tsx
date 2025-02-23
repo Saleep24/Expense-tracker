@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { AppShell, Group, Title, ActionIcon, Box, rem, Text, UnstyledButton } from '@mantine/core';
+import { AppShell, Group, Title, ActionIcon, Box, rem, Text } from '@mantine/core';
 import { Link, useLocation } from 'react-router-dom';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import useStore from '../store/useStore';
@@ -22,25 +22,24 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <AppShell
-      header={{ height: rem(45) }}
-      navbar={{ width: rem(160), breakpoint: 'sm' }}
-      padding="xs"
+      header={{ height: rem(60) }}
+      navbar={{ width: rem(200), breakpoint: 'sm' }}
+      padding="md"
     >
-      <AppShell.Header p="xs">
+      <AppShell.Header p="md">
         <Group justify="space-between" h="100%">
-          <Title order={3} size="h6">Expense Tracker</Title>
+          <Title order={3}>Expense Tracker</Title>
           <ActionIcon
-            variant="subtle"
+            variant="default"
             onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-            size="xs"
-            radius="xs"
+            size="md"
           >
-            {themeMode === 'dark' ? <IconSun size={rem(12)} /> : <IconMoon size={rem(12)} />}
+            {themeMode === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
           </ActionIcon>
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="xs">
+      <AppShell.Navbar p="md">
         <Box>
           {navItems.map((item) => (
             <Link
@@ -48,45 +47,30 @@ const Layout = ({ children }: LayoutProps) => {
               to={item.path}
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <UnstyledButton
+              <Box
+                p="xs"
                 style={{
-                  display: 'block',
-                  width: '100%',
-                  padding: '6px 12px',
-                  borderRadius: 'var(--mantine-radius-xs)',
                   backgroundColor:
                     location.pathname === item.path ? 'var(--mantine-color-blue-light)' : 'transparent',
-                  transition: 'all 100ms ease',
-                  marginBottom: '2px',
-                  '&:hover': {
-                    backgroundColor: location.pathname === item.path 
-                      ? 'var(--mantine-color-blue-light)' 
-                      : 'var(--mantine-color-gray-0)',
-                  },
+                  borderRadius: 'var(--mantine-radius-sm)',
+                  marginBottom: '4px',
                 }}
               >
                 <Text 
+                  size="sm"
                   fw={500}
-                  style={{ 
-                    color: location.pathname === item.path 
-                      ? 'var(--mantine-color-blue-filled)' 
-                      : 'var(--mantine-color-gray-7)',
-                    fontSize: '13.5px',
-                    letterSpacing: '-0.2px'
-                  }}
+                  c={location.pathname === item.path ? 'blue' : undefined}
                 >
                   {item.label}
                 </Text>
-              </UnstyledButton>
+              </Box>
             </Link>
           ))}
         </Box>
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
-        <Box p="md">
-          {children}
-        </Box>
+      <AppShell.Main>
+        {children}
       </AppShell.Main>
     </AppShell>
   );
